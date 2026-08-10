@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сертификат Генераторы</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;0,800;1,600&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    padding: 20px;
+    background: #f0f4f8;
+    font-family: 'Montserrat', sans-serif;
+    color: #1e293b;
+}
+
+.card {
+    max-width: 680px;
+    margin: 0 auto 30px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
+}
+
+.cert-wrapper {
+    display: none;
+    text-align: center;
+}
+
+/* Сертификат контейнері - ВЕРТИКАЛЬДЫ (Portrait) пропорция */
+.certificate-container {
+    position: relative;
+    width: 800px;
+    max-width: 100%;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.cert-bg-img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* 1. Оқушының Аты-жөні (Марат Қайсар - ортасынан сәл төмен) */
+.cert-student-name {
+    position: absolute;
+    top: 42.8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    text-align: center;
+    font-size: 32px;
+    font-weight: 800;
+    font-family: 'Montserrat', 'Times New Roman', serif;
+    color: #0c2b5e;
+    line-height: 1.2;
+    word-break: break-word;
+    text-shadow: 0px 0px 1px rgba(12, 43, 94, 0.2);
+}
+
+/* 2. Сыныбы (7 в - сызықтың ортасынан сәл төмен) */
+.cert-class {
+    position: absolute;
+    top: 50.4%;
+    left: 44%;
+    transform: translate(-50%, -50%);
+    width: 22%;
+    text-align: center;
+    font-size: 21px;
+    font-weight: 700;
+    color: #0c2b5e;
+    white-space: nowrap;
+}
+
+/* 3. Мектебі (№ 6 орта мектеп - сызық ортасында) */
+.cert-school {
+    position: absolute;
+    top: 54.1%;
+    left: 58%;
+    transform: translate(-50%, -50%);
+    width: 48%;
+    font-size: 19px;
+    font-weight: 700;
+    color: #0c2b5e;
+    text-align: center;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+/* 4. Мектеп директоры (Мұсаева Г.Б - жоғары сызықша бойында) */
+.cert-director {
+    position: absolute;
+    top: 80.1%;
+    left: 29%;
+    transform: translate(-50%, -50%);
+    width: 36%;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0c2b5e;
+}
+
+/* 5. Пән мұғалімі (Сызық бойында) */
+.cert-teacher {
+    position: absolute;
+    top: 80.1%;
+    left: 72%;
+    transform: translate(-50%, -50%);
+    width: 36%;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 700;
+    color: #0c2b5e;
+}
+
+/* 6. Күні мен Мекенжайы (10.08.2026 ж. / Жетіген ықшам ауданы) */
+.cert-date-city {
+    position: absolute;
+    top: 91.5%;
+    left: 81%;
+    transform: translate(-50%, -50%);
+    width: 32%;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #0c2b5e;
+    line-height: 1.35;
+}
+
+@media print {
+    @page {
+        size: portrait;
+        margin: 0;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background: white;
+    }
+
+    .no-print,
+    .card,
+    .actions,
+    .fine-tune-panel {
+        display: none !important;
+    }
+
+    .cert-wrapper {
+        display: block !important;
+    }
+
+    .certificate-container {
+        width: 100vw !important;
+        max-width: 100% !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+    }
+
+    .cert-bg-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: fill;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+}
+</style>
+</head>
+<body>
+
+<div class="card no-print" id="inputForm">
+    <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-slate-800">Сертификат Генераторы</h1>
+        <p class="text-sm text-slate-500 mt-1">«certificatee.png» үлгісі бойынша сертификат дайындау</p>
+    </div>
+
+    <!-- Сурет жүктеу хабарламасы -->
+    <div class="mb-5 p-3.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-blue-800 flex items-center justify-between">
+        <div>
+            <span class="font-semibold block mb-0.5">Сурет үлгісі:</span>
+            <span>«certificatee.png» суреті автоматты түрде жүктеледі. Қажет болса, басқа сурет жүктей аласыз:</span>
+        </div>
+        <label class="ml-3 cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-md transition shadow-sm text-xs whitespace-nowrap">
+            Сурет таңдау
+            <input type="file" id="imageUploader" accept="image/*" class="hidden" onchange="handleImageUpload(event)">
+        </label>
+    </div>
+
+    <form onsubmit="generateCertificate(event)" class="space-y-4">
+        <div>
+            <label class="block text-sm font-semibold text-slate-700 mb-1">Оқушының аты-жөні</label>
+            <input id="studentName" type="text" value="Марат Қайсар" placeholder="Мысалы: Марат Қайсар" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Сыныбы</label>
+                <input id="studentClass" type="text" value="7 «В»" placeholder="Мысалы: 7 «В»" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Мектебі / Ұйымы</label>
+                <input id="schoolName" type="text" value="№ 6 орта мектеп" placeholder="Мысалы: № 6 орта мектеп" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Мектеп директорының А.Ж.</label>
+                <input id="directorName" type="text" value="Мұсаева Г.Б." placeholder="Мысалы: Мұсаева Г.Б." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Пән мұғалімінің А.Ж.</label>
+                <input id="teacherName" type="text" value="Аскарова Г.Т." placeholder="Мысалы: Аскарова Г.Т." class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Берілген күні</label>
+                <input id="certDate" type="date" value="2026-08-10" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition" required>
+            </div>
+            <div>
+                <label class="block text-sm font-semibold text-slate-700 mb-1">Елді мекен / Ықшам аудан</label>
+                <input id="cityName" type="text" value="Жетіген ықшам ауданы" placeholder="Мысалы: Жетіген ықшам ауданы" class="w-full px-3.5 py-2.5 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
+            </div>
+        </div>
+
+        <button type="submit" class="w-full mt-2 py-3 px-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition duration-200">
+            Сертификатты дайындау және көру
+        </button>
+    </form>
+</div>
+
+<div class="cert-wrapper" id="certificateWrapper">
+    
+    <div class="certificate-container" id="printableCert">
+        <!-- Негізгі сурет -->
+        <img id="certImage" src="certificatee.png" class="cert-bg-img" alt="Сертификат фоны" onerror="handleImageError(this)">
+
+        <!-- Мәтіндер (Сурет үстінде) -->
+        <div class="cert-student-name" id="displayStudentName"></div>
+        <div class="cert-class" id="displayClass"></div>
+        <div class="cert-school" id="displaySchool"></div>
+        <div class="cert-director" id="displayDirector"></div>
+        <div class="cert-teacher" id="displayTeacher"></div>
+        <div class="cert-date-city" id="displayDateCity"></div>
+    </div>
+
+    <!-- Ыңғайлы реттеу панелі -->
+    <div class="no-print mt-4 max-w-2xl mx-auto bg-white p-4 rounded-xl shadow-sm border border-slate-200 text-xs text-left">
+        <div class="font-bold text-slate-700 mb-2 flex justify-between items-center">
+            <span>⚙️ Мәтіндерді дәлдеп жылжыту (Fine-Tuning)</span>
+            <button onclick="resetPositions()" class="text-blue-600 hover:underline text-xs">Бастапқы күйге қайтару</button>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Аты-жөні Жоғары/Төмен:</label>
+                <input type="range" min="35" max="50" step="0.2" value="42.8" oninput="adjustPos('displayStudentName', 'top', this.value + '%')" class="w-full">
+            </div>
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Сыныбы Жоғары/Төмен:</label>
+                <input type="range" min="45" max="55" step="0.2" value="50.4" oninput="adjustPos('displayClass', 'top', this.value + '%')" class="w-full">
+            </div>
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Мектебі Жоғары/Төмен:</label>
+                <input type="range" min="50" max="60" step="0.2" value="54.1" oninput="adjustPos('displaySchool', 'top', this.value + '%')" class="w-full">
+            </div>
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Директор Жоғары/Төмен:</label>
+                <input type="range" min="75" max="85" step="0.2" value="80.1" oninput="adjustPos('displayDirector', 'top', this.value + '%')" class="w-full">
+            </div>
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Мұғалім Жоғары/Төмен:</label>
+                <input type="range" min="75" max="85" step="0.2" value="80.1" oninput="adjustPos('displayTeacher', 'top', this.value + '%')" class="w-full">
+            </div>
+            <div>
+                <label class="block text-slate-600 mb-0.5 font-medium">Күні/Қала Жоғары/Төмен:</label>
+                <input type="range" min="85" max="95" step="0.2" value="91.5" oninput="adjustPos('displayDateCity', 'top', this.value + '%')" class="w-full">
+            </div>
+        </div>
+    </div>
+
+    <!-- Төменгі басқару батырмалары -->
+    <div class="actions mt-6 flex flex-wrap justify-center gap-3 no-print mb-10">
+        <button class="bg-slate-600 hover:bg-slate-700 text-white font-medium py-2.5 px-5 rounded-lg transition shadow" onclick="goBack()">
+            ← Өңдеуге қайту
+        </button>
+        <button class="bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2.5 px-6 rounded-lg shadow transition" onclick="window.print()">
+            🖨️ PDF сақтау / Басып шығару
+        </button>
+    </div>
+</div>
+
+<script>
+
+// Сурет жүктелмесе ескерту
+function handleImageError(imgElement) {
+    console.warn("certificatee.png суреті жергілікті папкадан табылмады. 'Сурет таңдау' батырмасы арқылы жүктей аласыз.");
+}
+
+// Файлдан сурет таңдау
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('certImage').src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Орындарды слайдер арқылы дәлдеу
+function adjustPos(elementId, property, value) {
+    document.getElementById(elementId).style[property] = value;
+}
+
+function resetPositions() {
+    document.getElementById('displayStudentName').style.top = "42.8%";
+    document.getElementById('displayClass').style.top = "50.4%";
+    document.getElementById('displaySchool').style.top = "54.1%";
+    document.getElementById('displayDirector').style.top = "80.1%";
+    document.getElementById('displayTeacher').style.top = "80.1%";
+    document.getElementById('displayDateCity').style.top = "91.5%";
+}
+
+function generateCertificate(event) {
+    event.preventDefault();
+
+    const studentName = document.getElementById("studentName").value.trim();
+    const studentClass = document.getElementById("studentClass").value.trim();
+    const schoolName = document.getElementById("schoolName").value.trim();
+    const directorName = document.getElementById("directorName").value.trim();
+    const teacherName = document.getElementById("teacherName").value.trim();
+    const dateValue = document.getElementById("certDate").value;
+    const cityName = document.getElementById("cityName").value.trim();
+
+    // 1. Оқушының Аты-жөні
+    const displayNameEl = document.getElementById("displayStudentName");
+    displayNameEl.innerText = studentName;
+
+    if (studentName.length <= 22) {
+        displayNameEl.style.fontSize = "32px";
+    } else if (studentName.length <= 32) {
+        displayNameEl.style.fontSize = "26px";
+    } else {
+        displayNameEl.style.fontSize = "22px";
+    }
+
+    // 2. Сыныбы
+    document.getElementById("displayClass").innerText = studentClass;
+
+    // 3. Мектебі
+    document.getElementById("displaySchool").innerText = schoolName;
+
+    // 4. Мектеп директоры
+    document.getElementById("displayDirector").innerText = directorName;
+
+    // 5. Пән мұғалімі
+    document.getElementById("displayTeacher").innerText = teacherName;
+
+    // 6. Күні мен Елді мекен (Екі жол етіп орналастыру)
+    let formattedDate = "";
+    if (dateValue) {
+        const parts = dateValue.split('-');
+        formattedDate = `${parts[2]}.${parts[1]}.${parts[0]} ж.`;
+    }
+    
+    const displayDateCityEl = document.getElementById("displayDateCity");
+    if (cityName) {
+        displayDateCityEl.innerHTML = `<div>${formattedDate}</div><div class="mt-0.5">${cityName}</div>`;
+    } else {
+        displayDateCityEl.innerText = formattedDate;
+    }
+
+    // Көріністерді ауыстыру
+    document.getElementById("inputForm").style.display = "none";
+    document.getElementById("certificateWrapper").style.display = "block";
+
+    // Басып шығару кезіндегі файл атауы
+    document.title = `Сертификат_${studentName.replace(/\s+/g, '_')}`;
+}
+
+function goBack() {
+    document.getElementById("inputForm").style.display = "block";
+    document.getElementById("certificateWrapper").style.display = "none";
+    document.title = "Сертификат Генераторы";
+}
+</script>
+
+</body>
+</html>
